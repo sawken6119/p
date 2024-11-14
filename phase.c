@@ -2,18 +2,18 @@
 #include "phase.h"
 #include <time.h>
 
+int L_proba[] = {22,15,7,7,21,21,7};
 
-t_move proba(int val){
+t_move proba(int val, int *LProba){
 
-    int L_proba[] = {22,15,7,7,21,21,7};
     t_move L_move[] = {F_10,F_20,F_30,B_10,T_LEFT,T_RIGHT,U_TURN};
-    int sum = L_proba[0];
+    int sum = LProba[0];
     for (int i=0;i<7;i++){
         if (val<sum) {
-            L_proba[i]-=1;
+            LProba[i]-=1;
             return L_move[i];
         }
-        else sum+=L_proba[i+1];
+        else sum+=LProba[i + 1];
     }
 }
 
@@ -23,6 +23,6 @@ void tirage(t_move L_move[]){
     for (int i=0;i<9;i++)
     {
         val = rand() %(100-i);
-        L_move[i] = proba(val);
+        L_move[i] = proba(val, L_proba);
     }
 }
