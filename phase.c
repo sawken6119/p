@@ -13,15 +13,12 @@ t_move proba(int val){
 
 }
 
-t_move tirage(){
+void tirage(t_move L_move[]){
     int val;
-    t_move L_move[8];
+    srand(time(NULL));
     for (int i=0;i<8;i++)
     {
         val = rand() %100;
-        printf("%d ", val);
         L_move[i] = proba(val);
-        afficher_move(L_move[i]);
     }
-    return *L_move;
 }
