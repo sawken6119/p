@@ -5,7 +5,10 @@
 #ifndef UNTITLED1_MOVES_H
 #define UNTITLED1_MOVES_H
 
+#include <stdlib.h>
+#include <stdio.h>
 #include "loc.h"
+
 /**
  * @brief Array of strings for the possible moves of the robot
  */
@@ -48,24 +51,5 @@ t_localisation move(t_localisation, t_move);
  * @return none
  */
 void updateLocalisation(t_localisation *, t_move);
-
-#ifndef MOVES_H
-#define MOVES_H
-
-typedef struct TreeNode {
-    int value;
-    int move;
-    struct TreeNode *parent;
-    struct TreeNode **children;
-    int num_children;
-} TreeNode;
-
-TreeNode* create_node(int value, int move, TreeNode* parent);
-void build_tree(TreeNode *node, int level, int moves[], int num_moves);
-void find_min_leaf(TreeNode* node, int *min_cost, TreeNode **min_leaf);
-void print_optimal_path(TreeNode *leaf);
-
-#endif
-
-
+void afficher_move(t_move move);
 #endif //UNTITLED1_MOVES_H

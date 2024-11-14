@@ -1,11 +1,9 @@
 //
 // Created by flasque on 19/10/2024.
 //
-#include <stdio.h>
-#include <stdlib.h>
+
 #include "moves.h"
 
-#define MAX_DEPTH 5
 /* prototypes of local functions */
 /* local functions are used only in this file, as helper functions */
 
@@ -156,77 +154,31 @@ void updateLocalisation(t_localisation *p_loc, t_move m)
     return;
 }
 
-TreeNode* create_node(int value, int move, TreeNode* parent) {
-    TreeNode* node = (TreeNode*)malloc(sizeof(TreeNode));
-    node->value = value;
-    node->move = move;
-    node->parent = parent;
-    node->num_children = 0;
-    node->children = NULL;
-    return node;
-}
-
-// Fonction récursive pour construire l'arbre
-void build_tree(TreeNode *node, int level, int moves[], int num_moves) {
-    if (level >= MAX_DEPTH || node->value >= 9999) {
-        return;
+void afficher_move(t_move move) {
+    switch (move) {
+        case F_10:
+            printf("Avancer de 10 m\n");
+            break;
+        case F_20:
+            printf("Avancer de 20 m\n");
+            break;
+        case F_30:
+            printf("Avancer de 30 m\n");
+            break;
+        case B_10:
+            printf("Reculer de 10 m\n");
+            break;
+        case T_LEFT:
+            printf("Tourner a gauche\n");
+            break;
+        case T_RIGHT:
+            printf("Tourner a droite\n");
+            break;
+        case U_TURN:
+            printf("Demi-tour\n");
+            break;
+        default:
+            printf("z\n");
+            break;
     }
-
-    // Allocation des enfants pour ce nœud
-    node->children = (TreeNode**)malloc(num_moves * sizeof(TreeNode*));
-    node->num_children = num_moves;
-
-    // Pour chaque mouvement possible
-    for (int i = 0; i < num_moves; i++) {
-        int new_value = node->value + moves[i];
-        node->children[i] = create_node(new_value, moves[i], node);
-
-        // Construire l'arbre pour le nœud enfant en excluant le mouvement actuel
-        int next_moves[num_moves - 1];
-        int index = 0;
-        for (int j = 0; j < num_moves; j++) {
-            if (j != i) {
-                next_moves[index++] = moves[j];
-            }
-        }
-        build_tree(node->children[i], level + 1, next_moves, num_moves - 1);
-    }
-}
-
-// Fonction pour trouver la feuille avec le coût minimal et son chemin
-void find_min_leaf(TreeNode* node, int *min_cost, TreeNode **min_leaf) {
-    if (node->num_children == 0) { // Si c'est une feuille
-        if (node->value < *min_cost) {
-            *min_cost = node->value;
-            *min_leaf = node;
-        }
-        return;
-    }
-
-    // Parcourir les enfants récursivement
-    for (int i = 0; i < node->num_children; i++) {
-        find_min_leaf(node->children[i], min_cost, min_leaf);
-    }
-}
-
-// Fonction pour afficher le chemin optimal
-void print_optimal_path(TreeNode *leaf) {
-    if (leaf == NULL) return;
-
-    int path[MAX_DEPTH];
-    int depth = 0;
-    TreeNode *current = leaf;
-
-    // Remonter jusqu'à la racine pour construire le chemin
-    while (current->parent != NULL) {
-        path[depth++] = current->move;
-        current = current->parent;
-    }
-
-    // Afficher le chemin en ordre inverse
-    printf("Optimal path: ");
-    for (int i = depth - 1; i >= 0; i--) {
-        printf("%d ", path[i]);
-    }
-    printf("\n");
 }
