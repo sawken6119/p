@@ -8,7 +8,7 @@
 #include "moves.h"
 
 t_move proba(int val);
-t_move tirage();
+void tirage(t_move L_move[]);
 
 
 
