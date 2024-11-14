@@ -1,24 +1,28 @@
 
 #include "phase.h"
+#include <time.h>
+
 
 t_move proba(int val){
 
-    if (val<22) return F_10;
-    else if (val<37) return F_20;
-    else if (val<44) return F_30;
-    else if (val<51) return B_10;
-    else if (val<72) return T_LEFT;
-    else if (val<93) return T_RIGHT;
-    else return U_TURN;
-
+    int L_proba[] = {22,15,7,7,21,21,7};
+    t_move L_move[] = {F_10,F_20,F_30,B_10,T_LEFT,T_RIGHT,U_TURN};
+    int sum = L_proba[0];
+    for (int i=0;i<7;i++){
+        if (val<sum) {
+            L_proba[i]-=1;
+            return L_move[i];
+        }
+        else sum+=L_proba[i+1];
+    }
 }
 
 void tirage(t_move L_move[]){
     int val;
     srand(time(NULL));
-    for (int i=0;i<8;i++)
+    for (int i=0;i<9;i++)
     {
-        val = rand() %100;
+        val = rand() %(100-i);
         L_move[i] = proba(val);
     }
 }
