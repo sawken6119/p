@@ -51,5 +51,7 @@ t_localisation move(t_localisation, t_move);
  * @return none
  */
 void updateLocalisation(t_localisation *, t_move);
+t_move *getRandomMoves(int N);
 void afficher_move(t_move move);
 #endif //UNTITLED1_MOVES_H
+
