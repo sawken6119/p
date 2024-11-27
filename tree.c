@@ -80,21 +80,6 @@ void creer_fils(t_node *Node, t_localisation loc, t_map map) {
     }
 }
 
-void creerArbre(t_node* node, t_localisation loc, t_map map){
-    // Si le nombre d'enfant est inférieur à 5, on arrête l'arbre
-    if (node->NbSons < 8)
-        return ;
-    else{
-        // On créer les fils du Node
-        // Puis on créer un arbre récursivement à partir de chacun des fils
-        creer_fils(node, loc, map);
-        for (int i=0; i< node->NbSons;i++){
-            t_localisation nv_loc = move(loc, node->reste[i]);
-            creerArbre(node->fils[i], nv_loc, map);
-        }
-    }
-}
-
 t_node* cout_mini(t_node* node){
     // Si le node n'existe pas ou possède une valeur trop élevé, on ne fait rien
     if (node == NULL || node->value >= 9999) {
