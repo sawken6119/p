@@ -1,3 +1,6 @@
+//
+// Created by arman on 20/11/2024.
+//
 #include "tree.h"
 #include <time.h>
 
@@ -79,7 +82,7 @@ void creer_fils(t_node *Node, t_localisation loc, t_map map) {
 
 void creerArbre(t_node* node, t_localisation loc, t_map map){
     // Si le nombre d'enfant est inférieur à 5, on arrête l'arbre
-    if (node->NbSons < 😎
+    if (node->NbSons < 8)
         return ;
     else{
         // On créer les fils du Node
@@ -92,3 +95,74 @@ void creerArbre(t_node* node, t_localisation loc, t_map map){
     }
 }
 
+t_node* cout_mini(t_node* node){
+    // Si le node n'existe pas ou possède une valeur trop élevé, on ne fait rien
+    if (node == NULL || node->value >= 9999) {
+        return NULL;
+    }
+    t_node* mini = node;
+    // On attribue récursivement new_mini à chaque fils de node
+    // S'il est plus petit que mini, alors mini = new_mini
+    for (int i = 0; i < node->NbSons; i++) {
+        t_node* new_mini = cout_mini(node->fils[i]);
+        if (new_mini && new_mini->value < mini->value) {
+            mini = new_mini;
+        }
+    }
+    return mini;
+}
+
+t_move* chemin(t_node* node, t_move* tirage){
+
+    t_move* chemin = malloc(node->prof*sizeof(t_move));
+    // Pour chaque indice de position, on récupère le mouvement associé dans tirage,
+    // puis on le retire
+    for (int i=0; i<node->prof; i++){
+        chemin[i]= tirage[node->position[i]];
+        tirage = supprime_e_Tab(tirage, node->position[i], 9-i);
+    }
+    return chemin;
+}
+
+
+void printTree(t_node *node, int profondeur) {
+    if (node == NULL) return;
+    // On fait un décalage à chaque profondeur pour une meilleur visibilité
+    for (int i = 0; i < profondeur; i++) {
+        printf("   ");
+    }
+    // On affiche la valeur, son nombre de fils, et sa profondeur
+    printf("Node Value: %d, NbSons: %d, Profondeur: %d\n", node->value, node->NbSons, node->prof);
+    // On recommence récursivement pout tous les fils
+    for (int i = 0; i < node->NbSons; i++) {
+        printTree(node->fils[i], profondeur + 1);
+    }
+}
+
+void phase(){
+    srand(time(NULL));
+    t_map map = createMapFromFile("..\\maps\\example1.map");
+    t_node* node;
+    t_localisation loca = loc_init(4,5,NORTH);
+    int nb_phase = 1;
+
+    while (map.costs[loca.pos.y][loca.pos.x] !=0 ){
+
+        t_move *tirage = getRandomMoves(9);
+        printf("Voici le tirage de la phase %d\n", nb_phase);
+        for (int i=0; i<9; i++){
+            afficher_move(tirage[i]);
+        }
+        printf("\n");
+
+        node = create_node(map.costs[loca.pos.y-1][loca.pos.x-1], 9, 0, tirage);
+        creerArbre(node, loca, map);
+        t_node *mini = cout_mini(node);
+        t_move *trajet = chemin(mini, tirage);
+        for (int i=0; i<mini->prof; i++){
+            loca = move(loca, trajet[i]);
+        }
+        nb_phase++;
+
+    }
+}
