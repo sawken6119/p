@@ -137,6 +137,34 @@ void printTree(t_node *node, int profondeur) {
     for (int i = 0; i < node->NbSons; i++) {
         printTree(node->fils[i], profondeur + 1);
     }
+
+    void phase(){
+    srand(time(NULL));
+    t_map map = createMapFromFile("..\\maps\\example1.map");
+    t_node* node;
+    t_localisation loca = loc_init(4,5,NORTH);
+    int nb_phase = 1;
+
+    while (map.costs[loca.pos.y][loca.pos.x] !=0 ){
+
+        t_move *tirage = getRandomMoves(9);
+        printf("Voici le tirage de la phase %d\n", nb_phase);
+        for (int i=0; i<9; i++){
+            afficher_move(tirage[i]);
+        }
+        printf("\n");
+
+        node = create_node(map.costs[loca.pos.y-1][loca.pos.x-1], 9, 0, tirage);
+        creerArbre(node, loca, map);
+        t_node *mini = cout_mini(node);
+        t_move *trajet = chemin(mini, tirage);
+        for (int i=0; i<mini->prof; i++){
+            loca = move(loca, trajet[i]);
+        }
+        nb_phase++;
+
+    }
+}
 }
 
 
